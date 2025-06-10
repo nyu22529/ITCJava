@@ -119,11 +119,16 @@ public class SignUpFrame {
 		JButton btnCancel = new JButton("취소");
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				frmSignUpFrame.setVisible(false);
 			}
 		});
 		btnCancel.setFont(new Font("굴림", Font.PLAIN, 13));
 		btnCancel.setBounds(210, 240, 100, 35);
 		frmSignUpFrame.getContentPane().add(btnCancel);
 
+	}
+
+	public JFrame getFrame() {
+		return frmSignUpFrame;
 	}
 }

@@ -4,11 +4,19 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+
+import db.DBConn;
+
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
 import java.awt.Font;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.awt.event.ActionEvent;
 
 public class LoginFrame {
@@ -16,6 +24,7 @@ public class LoginFrame {
 	private JFrame frmLoginFrame;
 	private JTextField tfId;
 	private JPasswordField pwF;
+	private Connection conn;
 
 	/**
 	 * Launch the application.
@@ -39,6 +48,7 @@ public class LoginFrame {
 	 */
 	public LoginFrame() {
 		initialize();
+		conn = DBConn.init();
 	}
 
 	/**
@@ -75,7 +85,30 @@ public class LoginFrame {
 		JButton btnLogin = new JButton("로그인");
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				try {
+					String sql = "SELECT * FROM student_info WHERE id=? AND password=?";
+					PreparedStatement pstmt = conn.prepareStatement(sql);
+					pstmt.setString(1, tfId.getText());
+					pstmt.setString(2, pwF.getText());
 
+					ResultSet rs = pstmt.executeQuery();
+
+					if (rs.next()) {
+						int id = rs.getInt(1);
+						String name = rs.getString("name");
+
+						System.out.println(id + " - " + name);
+						JOptionPane.showMessageDialog(frmLoginFrame, "아이디와 패스워드가 일치합니다.");
+
+						frmLoginFrame.setVisible(false);
+
+					} else {
+						JOptionPane.showMessageDialog(frmLoginFrame, "아이디와 패스워드가 일치하지 않습니다.");
+					}
+
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
 			}
 		});
 		btnLogin.setFont(new Font("굴림", Font.PLAIN, 13));
@@ -85,7 +118,9 @@ public class LoginFrame {
 		JButton btnSugnUp = new JButton("회원가입");
 		btnSugnUp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
+				SignUpFrame window = new SignUpFrame();
+				window.getFrame().setLocationRelativeTo(null);
+				window.getFrame().setVisible(true);
 			}
 		});
 		btnSugnUp.setFont(new Font("굴림", Font.PLAIN, 13));
