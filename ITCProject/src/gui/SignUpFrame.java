@@ -4,13 +4,21 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+
+import db.DBConn;
+
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import java.awt.Font;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.awt.event.ActionEvent;
 
 public class SignUpFrame {
@@ -19,7 +27,9 @@ public class SignUpFrame {
 	private JTextField tfId;
 	private JPasswordField pwF;
 	private JTextField tfName;
-	private JTextField tfGrades;
+	private Connection conn;
+	private JComboBox grades;
+	private JTextField tfDept;
 
 	/**
 	 * Launch the application.
@@ -42,6 +52,7 @@ public class SignUpFrame {
 	 * Create the application.
 	 */
 	public SignUpFrame() {
+		conn = DBConn.init();
 		initialize();
 	}
 
@@ -51,7 +62,7 @@ public class SignUpFrame {
 	private void initialize() {
 		frmSignUpFrame = new JFrame();
 		frmSignUpFrame.setTitle("회원가입");
-		frmSignUpFrame.setBounds(100, 100, 430, 330);
+		frmSignUpFrame.setBounds(100, 100, 430, 380);
 		frmSignUpFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmSignUpFrame.getContentPane().setLayout(null);
 
@@ -69,6 +80,22 @@ public class SignUpFrame {
 		JButton btnCheck = new JButton("중복확인");
 		btnCheck.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				try {
+					String sql = "SELECT * FROM student_info WHERE id=?";
+					PreparedStatement pstmt = conn.prepareStatement(sql);
+					pstmt.setString(1, tfId.getText());
+
+					ResultSet rs = pstmt.executeQuery();
+
+					if (rs.next()) {
+						JOptionPane.showMessageDialog(frmSignUpFrame, "이미 존재하는 아이디입니다.");
+					} else {
+						JOptionPane.showMessageDialog(frmSignUpFrame, "아이디 중복 확인");
+					}
+
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
 			}
 		});
 		btnCheck.setFont(new Font("굴림", Font.PLAIN, 13));
@@ -95,25 +122,56 @@ public class SignUpFrame {
 		tfName.setBounds(140, 130, 130, 28);
 		frmSignUpFrame.getContentPane().add(tfName);
 		tfName.setColumns(10);
+		
+		JLabel lblDept = new JLabel("학과");
+		lblDept.setFont(new Font("굴림", Font.PLAIN, 14));
+		lblDept.setBounds(50, 180, 80, 28);
+		frmSignUpFrame.getContentPane().add(lblDept);
+		
+		tfDept = new JTextField();
+		tfDept.setFont(new Font("굴림", Font.PLAIN, 13));
+		tfDept.setBounds(140, 180, 130, 28);
+		frmSignUpFrame.getContentPane().add(tfDept);
+		tfDept.setColumns(10);
 
 		JLabel lblGrade = new JLabel("학년");
 		lblGrade.setFont(new Font("굴림", Font.PLAIN, 14));
-		lblGrade.setBounds(50, 180, 80, 28);
+		lblGrade.setBounds(50, 230, 80, 28);
 		frmSignUpFrame.getContentPane().add(lblGrade);
 
-		JComboBox grades = new JComboBox();
+		grades = new JComboBox();
 		grades.setFont(new Font("굴림", Font.PLAIN, 13));
-		grades.setModel(new DefaultComboBoxModel(new String[] { "1", "2", "3", "4" }));
-		grades.setBounds(140, 180, 60, 28);
+		grades.setModel(new DefaultComboBoxModel(new String[] { "1", "2", "3" }));
+		grades.setBounds(140, 230, 60, 28);
 		frmSignUpFrame.getContentPane().add(grades);
 
 		JButton btnJoin = new JButton("회원가입");
 		btnJoin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				try {
+					String sql = "INSERT INTO student_info" + "(id, password, name, dept, grade) "
+							+ "VALUES(?, ?, ?, ?, ?)";
+					PreparedStatement pstmt = conn.prepareStatement(sql);
+					pstmt.setString(1, tfId.getText().trim());
+					pstmt.setString(2, pwF.getText().trim());
+					pstmt.setString(3, tfName.getText().trim());
+					pstmt.setString(4, tfDept.getText().trim());
+					pstmt.setInt(5, Integer.parseInt(grades.getSelectedItem().toString()));
+
+					pstmt.execute();
+
+					JOptionPane.showMessageDialog(frmSignUpFrame, "회원가입 성공");
+
+					pstmt.close();
+
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+
 			}
 		});
 		btnJoin.setFont(new Font("굴림", Font.PLAIN, 13));
-		btnJoin.setBounds(90, 240, 100, 35);
+		btnJoin.setBounds(90, 280, 100, 35);
 		frmSignUpFrame.getContentPane().add(btnJoin);
 
 		JButton btnCancel = new JButton("취소");
@@ -123,9 +181,9 @@ public class SignUpFrame {
 			}
 		});
 		btnCancel.setFont(new Font("굴림", Font.PLAIN, 13));
-		btnCancel.setBounds(210, 240, 100, 35);
+		btnCancel.setBounds(210, 280, 100, 35);
 		frmSignUpFrame.getContentPane().add(btnCancel);
-
+		
 	}
 
 	public JFrame getFrame() {

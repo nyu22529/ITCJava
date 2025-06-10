@@ -47,8 +47,8 @@ public class LoginFrame {
 	 * Create the application.
 	 */
 	public LoginFrame() {
-		initialize();
 		conn = DBConn.init();
+		initialize();
 	}
 
 	/**
@@ -94,12 +94,8 @@ public class LoginFrame {
 					ResultSet rs = pstmt.executeQuery();
 
 					if (rs.next()) {
-						int id = rs.getInt(1);
-						String name = rs.getString("name");
-
-						System.out.println(id + " - " + name);
 						JOptionPane.showMessageDialog(frmLoginFrame, "아이디와 패스워드가 일치합니다.");
-
+ 
 						frmLoginFrame.setVisible(false);
 
 					} else {
