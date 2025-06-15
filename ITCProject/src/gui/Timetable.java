@@ -16,6 +16,7 @@ public class Timetable {
 			public void run() {
 				try {
 					Timetable window = new Timetable();
+					window.frame.setLocationRelativeTo(null);
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();

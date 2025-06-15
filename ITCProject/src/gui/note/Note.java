@@ -16,6 +16,7 @@ public class Note {
 			public void run() {
 				try {
 					Note window = new Note();
+					window.frame.setLocationRelativeTo(null);
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();

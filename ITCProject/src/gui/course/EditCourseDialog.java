@@ -16,6 +16,7 @@ public class EditCourseDialog {
 			public void run() {
 				try {
 					EditCourseDialog window = new EditCourseDialog();
+					window.frame.setLocationRelativeTo(null);
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();

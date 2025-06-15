@@ -16,6 +16,7 @@ public class EditNoteDialog {
 			public void run() {
 				try {
 					EditNoteDialog window = new EditNoteDialog();
+					window.frame.setLocationRelativeTo(null);
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();

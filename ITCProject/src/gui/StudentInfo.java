@@ -16,6 +16,7 @@ public class StudentInfo {
 			public void run() {
 				try {
 					StudentInfo window = new StudentInfo();
+					window.frame.setLocationRelativeTo(null);
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();

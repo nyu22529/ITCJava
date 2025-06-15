@@ -16,6 +16,7 @@ public class SignUp {
 			public void run() {
 				try {
 					SignUp window = new SignUp();
+					window.frame.setLocationRelativeTo(null);
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();

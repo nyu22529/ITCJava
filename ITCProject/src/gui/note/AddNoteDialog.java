@@ -16,6 +16,7 @@ public class AddNoteDialog {
 			public void run() {
 				try {
 					AddNoteDialog window = new AddNoteDialog();
+					window.frame.setLocationRelativeTo(null);
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();

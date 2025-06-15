@@ -16,6 +16,7 @@ public class AddCourseDialog {
 			public void run() {
 				try {
 					AddCourseDialog window = new AddCourseDialog();
+					window.frame.setLocationRelativeTo(null);
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -36,8 +37,10 @@ public class AddCourseDialog {
 	 */
 	private void initialize() {
 		frame = new JFrame();
+		frame.setTitle("수업 추가");
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().setLayout(null);
 	}
 
 }

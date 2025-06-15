@@ -16,6 +16,7 @@ public class Login {
 			public void run() {
 				try {
 					Login window = new Login();
+					window.frame.setLocationRelativeTo(null);
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
